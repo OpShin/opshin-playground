@@ -90,15 +90,15 @@
 								<div class="alert alert-success" role="alert">
 									<div class="row">
 										<div class="col-md-3"><strong>Mainnet Address:</strong></div>
-										<div class="col-md-9">${response.mainnet_addr}</div>
+										<div class="col-md-9"><a href="https://cardanoscan.io/address/${response.mainnet_addr}" target="_blank">${response.mainnet_addr}</a></div>
 									</div>
 									<div class="row">
 										<div class="col-md-3"><strong>Testnet Address:</strong></div>
-										<div class="col-md-9">${response.testnet_addr}</div>
+										<div class="col-md-9"><a href="https://preprod.cardanoscan.io/address/${response.testnet_addr}" target="_blank">${response.testnet_addr}</a></div>
 									</div>
 									<div class="row">
 										<div class="col-md-3"><strong>Policy ID:</strong></div>
-										<div class="col-md-9">${response.policy_id}</div>
+										<div class="col-md-9"><a href="https://preprod.cardanoscan.io/tokenPolicy/${response.policy_id}" target="_blank">${response.policy_id}</a></div>
 									</div>
 									<hr>
 									<button id="downloadButton" class="btn btn-success btn-sm">Download script.plutus</button>
