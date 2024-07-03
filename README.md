@@ -22,14 +22,14 @@ The idea for creating an OpShin Playground website was originally raised in [OpS
 2. Set up a virtual environment and install required packages:
    ```
    cd server
-   python -m venv .venv
+   python3 -m venv .venv
    source .venv/bin/activate
    pip install -r requirements.txt
    ```
 
 3. Run the server using uvicorn:
    ```
-   uvicorn main:app --reload
+   uvicorn server:app --reload --port 8000
    ```
 
 ### Frontend Setup
