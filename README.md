@@ -15,11 +15,16 @@ The idea for creating an OpShin Playground website was originally raised in [OpS
 
 ## Setup Instructions
 
+### Supported Versions
+
+The following versions of `python` and `npm` are supported/recommended:
+- **Python:** 3.9.x and 3.10.x
+- **npm:** 10.x.x and 9.x.x
+Please ensure you are using one of these supported versions to avoid compatibility issues.
+
 ### Server Setup
 
-1. Ensure `python 3.9+` and `pip` are installed.
-
-2. Set up a virtual environment and install required packages:
+1. Set up a virtual environment and install required packages:
    ```
    cd server
    python3 -m venv .venv
@@ -27,7 +32,7 @@ The idea for creating an OpShin Playground website was originally raised in [OpS
    pip install -r requirements.txt
    ```
 
-3. Run the server using uvicorn:
+2. Run the server using uvicorn:
    ```
    uvicorn server:app --reload --port 8000
    ```
