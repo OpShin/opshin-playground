@@ -8,6 +8,7 @@ import sys
 import subprocess
 from pathlib import Path
 from typing import Union
+import opshin
 
 app = FastAPI()
 
@@ -95,6 +96,11 @@ def lint(
     # Run the command and save the output
     with open(linting_output_fp, "w") as f:
         subprocess.run(command, stdout=f)
+
+
+@app.get("/opshin_version")
+def get_opshin_version():
+    return {"opshin_version": opshin.__version__}
 
 
 @app.post("/compile")
