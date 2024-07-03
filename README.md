@@ -1,5 +1,7 @@
 # OpShin Playground
 
+![OpShin Playground Screenshot](app_screenshot.png)
+
 This is OpShin Playground, a simple web application designed for exploring [OpShin](https://github.com/OpShin), a python-based Cardano Smart Contract language. This project serves as an interactive environment where users can experiment with OpShin code without the need for a local setup.
 
 The idea for creating an OpShin Playground website was originally raised in [OpShin GitHub issue #346](https://github.com/OpShin/opshin/issues/346).
