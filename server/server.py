@@ -123,6 +123,8 @@ async def compile_code(code_input: CodeInput):
     testnet_addr_path = Path(output_directory) / "testnet.addr"
     policy_id_path = Path(output_directory) / "script.policy_id"
     plutus_file_path = Path(output_directory) / "script.plutus"
+    blueprint_file_path = Path(output_directory) / "blueprint.json"
+    cbor_file_path = Path(output_directory) / "script.cbor"
 
     if not linting_output_path.exists():
         linting_output = ""
@@ -153,6 +155,18 @@ async def compile_code(code_input: CodeInput):
     else:
         with open(plutus_file_path, "r") as file:
             script_plutus = file.read()
+    
+    if not blueprint_file_path.exists():
+        blueprint = ""
+    else:
+        with open(blueprint_file_path, "r") as file:
+            blueprint = file.read()
+
+    if not cbor_file_path.exists():
+        cbor = ""
+    else:
+        with open(cbor_file_path, "rb") as file:
+            cbor = file.read()
 
     return {
         "linting_output": "".join(linting_output.split("/")[2:]),
@@ -160,6 +174,8 @@ async def compile_code(code_input: CodeInput):
         "testnet_addr": testnet_addr,
         "policy_id": policy_id,
         "script_plutus": script_plutus,
+        "script_blueprint": blueprint,
+        "script_cbor": cbor,
     }
 
 

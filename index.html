@@ -123,17 +123,45 @@
 										<div class="col-md-9"><a href="https://preprod.cardanoscan.io/tokenPolicy/${response.policy_id}" target="_blank">${response.policy_id}</a></div>
 									</div>
 									<hr>
-									<button id="downloadButton" class="btn btn-success btn-sm">Download script.plutus</button>
+									<button id="downloadButtonPlutus" class="btn btn-success btn-sm" style="margin-right: 10px;">Download script.plutus</button>
+									<button id="downloadButtonCbor" class="btn btn-success btn-sm" style="margin-right: 10px;">Download script.cbor</button>
+									<button id="downloadButtonBlueprint" class="btn btn-success btn-sm">Download blueprint.json</button>
 								</div>
 							`;
-							var downloadButton = document.getElementById('downloadButton');
-							downloadButton.style.display = 'inline-block';
-							downloadButton.onclick = function () {
+							var downloadButtonPlutus = document.getElementById('downloadButtonPlutus');
+							downloadButtonPlutus.style.display = 'inline-block';
+							downloadButtonPlutus.onclick = function () {
 								var blob = new Blob([response.script_plutus], { type: 'text/plain' });
 								var url = URL.createObjectURL(blob);
 								var a = document.createElement('a');
 								a.href = url;
 								a.download = 'script.plutus';
+								document.body.appendChild(a);
+								a.click();
+								document.body.removeChild(a);
+								URL.revokeObjectURL(url);
+							};
+							var downloadButtonCbor = document.getElementById('downloadButtonCbor');
+							downloadButtonCbor.style.display = 'inline-block';
+							downloadButtonCbor.onclick = function () {
+								var blob = new Blob([response.script_cbor], { type: 'application/octet-stream' });
+								var url = URL.createObjectURL(blob);
+								var a = document.createElement('a');
+								a.href = url;
+								a.download = 'script.cbor';
+								document.body.appendChild(a);
+								a.click();
+								document.body.removeChild(a);
+								URL.revokeObjectURL(url);
+							};
+							var downloadButtonBlueprint = document.getElementById('downloadButtonBlueprint');
+							downloadButtonBlueprint.style.display = 'inline-block';
+							downloadButtonBlueprint.onclick = function () {
+								var blob = new Blob([response.script_blueprint], { type: 'application/json' });
+								var url = URL.createObjectURL(blob);
+								var a = document.createElement('a');
+								a.href = url;
+								a.download = 'blueprint.json';
 								document.body.appendChild(a);
 								a.click();
 								document.body.removeChild(a);
