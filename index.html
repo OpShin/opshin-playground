@@ -80,7 +80,7 @@
 	<script src="node_modules/monaco-editor/min/vs/editor/editor.main.js"></script>
 
 	<script>
-		fetch('http://127.0.0.1:8000/opshin_version')
+	    fetch('https://api.playground.opshin.dev/opshin_version')
             .then(response => response.json())
             .then(data => {
                 document.getElementById('opshinVersion').textContent = `powered by OpShin v${data.opshin_version}`;
@@ -110,7 +110,7 @@ def validator(datum: WithdrawDatum, redeemer: None, context: ScriptContext) -> N
 			var requestData = JSON.stringify({ 'code': code });
 
 			var xhr = new XMLHttpRequest();
-			xhr.open('POST', 'http://127.0.0.1:8000/compile', true);
+			xhr.open('POST', 'https://api.playground.opshin.dev/compile', true);
 			xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
 
 			xhr.onreadystatechange = function () {
