@@ -3,4 +3,4 @@ uvicorn[standard]
 pydantic
 python-multipart
 aiofiles
-opshin==0.21.0
+opshin==0.21.2
