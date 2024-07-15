@@ -52,7 +52,7 @@
         <div class="container">
             <div class="navbar-header">
                 <a class="navbar-brand" href="#">OpShin Playground</a>
-                <span id="opshinVersion" class="navbar-text opshin-version"></span>
+		<a href="https://opshin.dev"><span id="opshinVersion" class="navbar-text opshin-version"></span></a>
             </div>
         </div>
     </nav>
@@ -88,7 +88,20 @@
             .catch(error => console.error('Error fetching OpShin version:', error));
 
 		var editor = monaco.editor.create(document.getElementById('container'), {
-			value: ['from opshin.prelude import *', '', 'def validator(datum: BuiltinData, redeemer: BuiltinData, context: ScriptContext) -> None:', '    assert True', ''].join('\n'),
+			value: `\
+from opshin.prelude import *
+
+@dataclass()
+class WithdrawDatum(PlutusData):
+    pubkeyhash: bytes
+
+def validator(datum: WithdrawDatum, redeemer: None, context: ScriptContext) -> None:
+    sig_present = False
+    for s in context.tx_info.signatories:
+        if datum.pubkeyhash == s:
+            sig_present = True
+    assert sig_present, "Required signature missing",
+`,
 			language: 'python'
 		});
 
