@@ -44,34 +44,13 @@ def build(
         script,
         *args,
         "--recursion-limit",
-        "2000",
+        "4000",
         "-o",
         script.parent,
     ]
-    subprocess.run(command)
-
     if compressed:
-        built_contract = Path(f"{script.parent}/script.cbor")
-        built_contract_compressed_cbor = Path(f"{script.parent}/tmp.cbor")
-
-        with built_contract_compressed_cbor.open("wb") as fp:
-            subprocess.run(["plutonomy-cli", built_contract, "--default"], stdout=fp)
-
-        subprocess.run(
-            [
-                sys.executable,
-                "-m",
-                "uplc",
-                "build",
-                "--from-cbor",
-                built_contract_compressed_cbor,
-                "-o",
-                f"{script.parent}/build",
-                f"{script.parent}/build",
-                "--recursion-limit",
-                "2000",
-            ]
-        )
+        command.append("-O3")
+    subprocess.run(command)
 
 
 def lint(
