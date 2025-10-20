@@ -24,6 +24,7 @@ app.add_middleware(
 
 class CodeInput(BaseModel):
     code: str
+    compressed: bool = False
 
 
 def build(
@@ -82,7 +83,8 @@ def get_opshin_version():
 
 @app.post("/compile")
 async def compile_code(code_input: CodeInput):
-    code_hash = hashlib.sha256(code_input.code.encode()).hexdigest()
+    hash_input = f"{code_input.code}|compressed={code_input.compressed}".encode()
+    code_hash = hashlib.sha256(hash_input).hexdigest()
     output_directory = f"builds/{code_hash}"
     if not Path(output_directory).exists():
         os.makedirs(output_directory)
@@ -91,7 +93,7 @@ async def compile_code(code_input: CodeInput):
             file.write(code_input.code)
         try:
             lint("any", file_path)
-            build(file_path, compressed=False)
+            build(file_path, compressed=code_input.compressed)
         except subprocess.CalledProcessError as e:
             raise HTTPException(status_code=500, detail="Build process failed")
 

@@ -62,10 +62,13 @@
 		<div class="row full-height">
 			<div class="col-xs-12 top-container" id="container" style="border: 1px solid grey; margin-top: 65px;"></div>
 			<div class="col-xs-12 bottom-container row" style="margin-top: 15px;">
-				<div class="col-md-2">
+				<div class="col-md-2 col-sm-4 col-xs-12" style="margin-bottom: 10px;">
 					<button id="compileButton" class="btn btn-primary">Compile</button>
 				</div>
-				<div class="col-md-10">
+				<div class="col-md-2 col-sm-4 col-xs-12" style="margin-bottom: 10px;">
+					<button id="compressionToggle" class="btn btn-default">Compression: Off</button>
+				</div>
+				<div class="col-md-8 col-sm-12 col-xs-12">
 					<div id="result"></div>
 				</div>
 			</div>
@@ -107,9 +110,23 @@ def validator(context: ScriptContext) -> None:
 			language: 'python'
 		});
 
+		var isCompressed = false;
+		var compressionToggleButton = document.getElementById('compressionToggle');
+		compressionToggleButton.addEventListener('click', function () {
+			isCompressed = !isCompressed;
+			compressionToggleButton.textContent = isCompressed ? 'Compression: On' : 'Compression: Off';
+			if (isCompressed) {
+				compressionToggleButton.classList.remove('btn-default');
+				compressionToggleButton.classList.add('btn-success');
+			} else {
+				compressionToggleButton.classList.remove('btn-success');
+				compressionToggleButton.classList.add('btn-default');
+			}
+		});
+
 		document.getElementById('compileButton').addEventListener('click', function () {
 			var code = editor.getValue();
-			var requestData = JSON.stringify({ 'code': code });
+			var requestData = JSON.stringify({ 'code': code, 'compressed': isCompressed });
 
 			var xhr = new XMLHttpRequest();
 			xhr.open('POST', 'https://api.playground.opshin.dev/compile', true);
