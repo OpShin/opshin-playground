@@ -27,7 +27,6 @@ class CodeInput(BaseModel):
 
 
 def build(
-    type: str,
     script: Union[Path, str],
     cli_options=("--cf",),
     args=(),
@@ -40,7 +39,6 @@ def build(
         "opshin",
         *cli_options,
         "build",
-        type,
         script,
         *args,
         "--recursion-limit",
@@ -93,7 +91,7 @@ async def compile_code(code_input: CodeInput):
             file.write(code_input.code)
         try:
             lint("any", file_path)
-            build("spending", file_path, compressed=False)
+            build(file_path, compressed=False)
         except subprocess.CalledProcessError as e:
             raise HTTPException(status_code=500, detail="Build process failed")
 
