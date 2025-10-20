@@ -35,15 +35,27 @@
             justify-content: space-between; /* Align items evenly across the flex container */
             align-items: center; /* Center vertically */
             width: 100%;
-        }
-        .navbar-brand {
+		}
+		.navbar-brand {
             margin-right: auto; /* Push the navbar brand/logo to the left */
-        }
-        .opshin-version {
+		}
+		.opshin-version {
             text-align: right; /* Align the OpShin version text to the right */
             margin-left: auto; /* Push the OpShin version text to the right */
             white-space: nowrap; /* Prevent wrapping */
-        }
+		}
+		.spinner {
+			animation: spin 1s linear infinite;
+			display: inline-block;
+		}
+		@keyframes spin {
+			from {
+				transform: rotate(0deg);
+			}
+			to {
+				transform: rotate(360deg);
+			}
+		}
 	</style>
 </head>
 
@@ -110,8 +122,27 @@ def validator(context: ScriptContext) -> None:
 			language: 'python'
 		});
 
+		var compileButton = document.getElementById('compileButton');
 		var isCompressed = false;
 		var compressionToggleButton = document.getElementById('compressionToggle');
+		var resultDiv = document.getElementById('result');
+
+		function setLoadingState(isLoading) {
+			compileButton.disabled = isLoading;
+			compressionToggleButton.disabled = isLoading;
+			if (isLoading) {
+				compileButton.textContent = 'Compiling...';
+				resultDiv.innerHTML = `
+					<div class="alert alert-info" role="alert">
+						<span class="glyphicon glyphicon-refresh spinner" aria-hidden="true"></span>
+						<span style="margin-left: 8px;">Compiling...</span>
+					</div>
+				`;
+			} else {
+				compileButton.textContent = 'Compile';
+			}
+		}
+
 		compressionToggleButton.addEventListener('click', function () {
 			isCompressed = !isCompressed;
 			compressionToggleButton.textContent = isCompressed ? 'Compression: On' : 'Compression: Off';
@@ -124,9 +155,10 @@ def validator(context: ScriptContext) -> None:
 			}
 		});
 
-		document.getElementById('compileButton').addEventListener('click', function () {
+		compileButton.addEventListener('click', function () {
 			var code = editor.getValue();
 			var requestData = JSON.stringify({ 'code': code, 'compressed': isCompressed });
+			setLoadingState(true);
 
 			var xhr = new XMLHttpRequest();
 			xhr.open('POST', 'https://api.playground.opshin.dev/compile', true);
@@ -134,7 +166,7 @@ def validator(context: ScriptContext) -> None:
 
 			xhr.onreadystatechange = function () {
 				if (xhr.readyState === 4) {
-					var resultDiv = document.getElementById('result');
+					setLoadingState(false);
 					if (xhr.status === 200) {
 						var response = JSON.parse(xhr.responseText);
 
@@ -217,6 +249,10 @@ def validator(context: ScriptContext) -> None:
 						downloadButton.style.display = 'none';
 					}
 				}
+			};
+			xhr.onerror = function () {
+				setLoadingState(false);
+				resultDiv.innerText = 'Error: Network request failed.';
 			};
 			xhr.send(requestData);
 		});

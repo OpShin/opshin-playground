@@ -29,7 +29,7 @@ class CodeInput(BaseModel):
 
 def build(
     script: Union[Path, str],
-    cli_options=("--cf",),
+    cli_options=(),
     args=(),
     compressed=False,
 ):
@@ -49,13 +49,14 @@ def build(
     ]
     if compressed:
         command.append("-O3")
-    subprocess.run(command)
+    res = subprocess.run(command, check=True, capture_output=True)
+    return res.stdout.decode("utf-8"), res.stderr.decode("utf-8")
+
 
 
 def lint(
-    type: str,
     script: Union[Path, str],
-    cli_options=("--cf",),
+    cli_options=(),
     args=(),
 ):
     script = Path(script)
@@ -65,7 +66,6 @@ def lint(
         "opshin",
         *cli_options,
         "lint",
-        type,
         script,
         *args,
     ]
@@ -73,7 +73,7 @@ def lint(
 
     # Run the command and save the output
     with open(linting_output_fp, "w") as f:
-        subprocess.run(command, stdout=f)
+        subprocess.run(command, stdout=f, check=True)
 
 
 @app.get("/opshin_version")
@@ -92,8 +92,9 @@ async def compile_code(code_input: CodeInput):
         with open(file_path, "w") as file:
             file.write(code_input.code)
         try:
-            lint("any", file_path)
-            build(file_path, compressed=code_input.compressed)
+            lint(file_path)
+            out = build(file_path, compressed=code_input.compressed)
+            print(out)
         except subprocess.CalledProcessError as e:
             raise HTTPException(status_code=500, detail="Build process failed")
 
@@ -159,4 +160,4 @@ async def compile_code(code_input: CodeInput):
 
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="127.0.0.1", port=8000)
+    uvicorn.run(app, host="127.0.0.1", port=8001)
