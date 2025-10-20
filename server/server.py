@@ -83,7 +83,7 @@ def get_opshin_version():
 
 @app.post("/compile")
 async def compile_code(code_input: CodeInput):
-    hash_input = f"{code_input.code}|compressed={code_input.compressed}".encode()
+    hash_input = f"{code_input.code}|compressed={code_input.compressed}|opshinversion={opshin.__version__}".encode()
     code_hash = hashlib.sha256(hash_input).hexdigest()
     output_directory = f"builds/{code_hash}"
     if not Path(output_directory).exists():
