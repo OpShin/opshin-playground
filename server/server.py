@@ -28,28 +28,26 @@ class CodeInput(BaseModel):
 
 
 def build(
-    script: Union[Path, str],
+    script_name: Union[Path, str],
+    output_path: Path,
     cli_options=(),
     args=(),
     compressed=False,
 ):
-    script = Path(script)
     command = [
         sys.executable,
         "-m",
         "opshin",
         *cli_options,
         "build",
-        script,
+        script_name,
         *args,
         "--recursion-limit",
         "4000",
-        "-o",
-        script.parent,
     ]
     if compressed:
         command.append("-O3")
-    res = subprocess.run(command, check=True, capture_output=True)
+    res = subprocess.run(command, check=True, capture_output=True, cwd=output_path)
     return res.stdout.decode("utf-8"), res.stderr.decode("utf-8")
 
 
@@ -93,7 +91,7 @@ async def compile_code(code_input: CodeInput):
             file.write(code_input.code)
         try:
             lint(file_path)
-            out = build(file_path, compressed=code_input.compressed)
+            out = build(Path(file_path).name, output_path=Path(output_directory), compressed=code_input.compressed)
             print(out)
         except subprocess.CalledProcessError as e:
             raise HTTPException(status_code=500, detail="Build process failed")
