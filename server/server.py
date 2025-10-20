@@ -1,3 +1,5 @@
+import shutil
+
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -91,18 +93,19 @@ async def compile_code(code_input: CodeInput):
             file.write(code_input.code)
         try:
             lint(file_path)
-            out = build(Path(file_path).name, output_path=Path(output_directory), compressed=code_input.compressed)
-            print(out)
+            build(Path(file_path).name, output_path=Path(output_directory), compressed=code_input.compressed)
         except subprocess.CalledProcessError as e:
+            shutil.rmtree(output_directory)
             raise HTTPException(status_code=500, detail="Build process failed")
 
-    linting_output_path = Path(output_directory) / "linting_output.txt"
-    mainnet_addr_path = Path(output_directory) / "mainnet.addr"
-    testnet_addr_path = Path(output_directory) / "testnet.addr"
-    policy_id_path = Path(output_directory) / "script.policy_id"
-    plutus_file_path = Path(output_directory) / "script.plutus"
-    blueprint_file_path = Path(output_directory) / "blueprint.json"
-    cbor_file_path = Path(output_directory) / "script.cbor"
+    build_output_path = Path(output_directory) / "build/validator"
+    linting_output_path = build_output_path / "linting_output.txt"
+    mainnet_addr_path = build_output_path / "mainnet.addr"
+    testnet_addr_path = build_output_path / "testnet.addr"
+    policy_id_path = build_output_path / "script.policy_id"
+    plutus_file_path = build_output_path / "script.plutus"
+    blueprint_file_path = build_output_path / "blueprint.json"
+    cbor_file_path = build_output_path / "script.cbor"
 
     if not linting_output_path.exists():
         linting_output = ""
