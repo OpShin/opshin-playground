@@ -31,18 +31,34 @@
 			height: 280px;
 		}
 		.navbar-header {
-            display: flex;
-            justify-content: space-between; /* Align items evenly across the flex container */
-            align-items: center; /* Center vertically */
-            width: 100%;
+			display: flex;
+			align-items: center;
+			width: 100%;
 		}
 		.navbar-brand {
-            margin-right: auto; /* Push the navbar brand/logo to the left */
+			margin-right: 20px;
+		}
+		.navbar-links {
+			display: flex;
+			align-items: center;
+			gap: 15px;
+			flex-wrap: wrap;
+		}
+		.navbar-link {
+			display: inline-block;
+			padding: 15px 0;
+			color: #777;
+			text-decoration: none;
+		}
+		.navbar-link:hover,
+		.navbar-link:focus {
+			color: #333;
+			text-decoration: none;
 		}
 		.opshin-version {
-            text-align: right; /* Align the OpShin version text to the right */
-            margin-left: auto; /* Push the OpShin version text to the right */
-            white-space: nowrap; /* Prevent wrapping */
+			margin-left: auto;
+			text-align: right;
+			white-space: nowrap;
 		}
 		.spinner {
 			animation: spin 1s linear infinite;
@@ -61,13 +77,17 @@
 
 <body>
 	<nav class="navbar navbar-default navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <a class="navbar-brand" href="#">OpShin Playground</a>
-		<a href="https://opshin.dev"><span id="opshinVersion" class="navbar-text opshin-version"></span></a>
-            </div>
-        </div>
-    </nav>
+		<div class="container">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="#">OpShin Playground</a>
+				<div class="navbar-links">
+					<a class="navbar-link" href="https://opshin.dev" target="_blank" rel="noopener noreferrer">Homepage</a>
+					<a class="navbar-link" href="https://opshin.opshin.dev" target="_blank" rel="noopener noreferrer">Documentation</a>
+				</div>
+				<span id="opshinVersion" class="navbar-text opshin-version"></span>
+			</div>
+		</div>
+	</nav>
 
 	<!-- Main content -->
 	<div class="container container-fluid full-height">
