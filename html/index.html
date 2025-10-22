@@ -116,7 +116,7 @@
 	<script src="node_modules/monaco-editor/min/vs/editor/editor.main.js"></script>
 
 	<script>
-	    fetch('https://api.playground.opshin.dev/opshin_version')
+	    fetch('https://playground.opshin.dev/api/opshin_version')
             .then(response => response.json())
             .then(data => {
                 document.getElementById('opshinVersion').textContent = `powered by OpShin v${data.opshin_version}`;
@@ -182,7 +182,7 @@ def validator(context: ScriptContext) -> None:
 			setLoadingState(true);
 
 			var xhr = new XMLHttpRequest();
-			xhr.open('POST', 'https://api.playground.opshin.dev/compile', true);
+			xhr.open('POST', 'https://playground.opshin.dev/api/compile', true);
 			xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
 
 			xhr.onreadystatechange = function () {
