@@ -1,0 +1,11 @@
+services:
+  opshin-server:
+    image: python:3.10-slim
+    container_name: opshin-server
+    working_dir: /app
+    volumes:
+      - ./server:/app
+    command: sh -c "pip install --no-cache-dir -r requirements.txt && uvicorn server:app --host 0.0.0.0 --port 8001"
+    ports:
+      - "8001:8001"
+    restart: unless-stopped
